@@ -1,0 +1,59 @@
+Nested Square Root Simplifier
+Usage:  nsrt_add [a] [b] [c]
+        nsrt_add [a] [c]
+        nsrt_sub [a] [b] [c]
+        nsrt_sub [a] [c]
+
+A nested radical is a radical having radicals inside itself.
+sqrt(5 + (2 * sqrt(6))) is an example of a nested square root.
+
+Although already strictly simplifed, there are cases and reasons for which
+a "de-nested" form of such radicals is preferrable, but this rewritten form
+does not always exist.
+
+sqrt(5 + 2 sqrt(6)) == sqrt(3) + sqrt(2)
+sqrt(1 + 1 sqrt(1)) == sqrt(1/2) + sqrt(1/2) = sqrt(2)/2 + sqrt(2)/2 = sqrt(2)
+sqrt(2 + 1 sqrt(2)), or sqrt(2 + sqrt(2)), cannot be de-nested.
+
+The use of this software is to split nested square roots of the form:
+sqrt(a + b sqrt(c)) == sqrt(m) + sqrt(n), or,
+sqrt(a - b sqrt(c)) == sqrt(m) - sqrt(n),
+
+[Because the formula for de-nesting either case is essentially the same, only
+nsrt_add has been linked.  The only code difference in nsrt_sub.c is that the
+printf() display shows subtracting the two solutions for (m) and (n), not add.]
+
+Variable operation is all done using non-sign-extended word registers (16 bits).
+Input any decimal integers for (a), (b), and (c) of the range:  0 to +65,535.
+
+Omitting the third parameter by calling `nsrt_add [a] [b]` will just do this:
+sqrt(a + sqrt(b)) == sqrt(m) + sqrt(n)
+So if there is no coefficient (besides positive one) of sqrt(c), this works.
+
+What if (b) needs to be a negative number?
+sqrt(a + b sqrt(c)), where b < 0.
+Compile nsrt_sub, or just use nsrt_add and pretend it's a minus sign.
+Operation involves squaring both (a) and (b), so who cares if they're negative.
+
+What if the decimals given are floating-point?
+sqrt(0.05 + 0.02 sqrt(6.0))
+
+Multiply by the square root of 100.
+sqrt((0.05 + 0.02 sqrt(6.0)) * 100)
+sqrt(5 + 2 sqrt(6))
+It's the same shit.  Granted, if (c) is floating-point, it's trickier.
+
+In fact, any nested square root can be split with this formula:
+                           sqrt(2a + 2R) +/- sqrt(2a - 2R)
+sqrt(a +/- b * sqrt(c)) == -------------------------------
+                                          2
+
+If numbers are too big to fit into instruction word size on the CPU, that is the
+formula for doing the desk work independent of this software.
+
+R must be a real, rational number for this formula to result in a de-nestation.
+R = sqrt((a * a) - (b * b * c));
+
+If R is either the square root of a negative number or not a real number
+integer, the program will respond that it is not possible to split the square
+root and display the floating-point approximation of (R).
