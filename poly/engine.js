@@ -1,13 +1,14 @@
 /******************************************************************************\
 * Project:  Standard Polynomial Roots Solver                                   *
-* Release:  2012.09.30                                                         *
+* Release:  2012.10.01                                                         *
 * Creator:  R. J. Swedlow                                                      *
 * License:  public domain                                                      *
 \******************************************************************************/
 
 function solve_degree_0(a) { //constant
     "use strict";
-    return (undefined);
+    a = (a === 0) ? null : NaN;
+    return (a);
 }
 function solve_degree_1(a, b) { //linear
     "use strict";
@@ -29,35 +30,47 @@ function solve_degree_2(a, b, c) { //quadratic
 }
 function solve_degree_3(a, b, c, d) { //cubic
     "use strict";
-    return ("not yet implemented:  cubic polynomial functions");
+    a = null;
+    b = null;
+    c = null;
+    d = null;
+    return (null); /* not yet implemented */
 }
 function solve_degree_4(a, b, c, d, e) { //quartic
     "use strict";
-    return ("not yet implemented:  quartic polynomial functions");
+    a = null;
+    b = null;
+    c = null;
+    d = null;
+    e = null;
+    return (null); /* not yet implemented */
 }
-function solve_degree_5(a, b, c, d, e, f) { //quentic
+function solve_degree_5(a, b, c, d, e, f) { //quintic
     "use strict";
-    return ("not yet implemented:  quentic polynomial functions");
+    a = null;
+    b = null;
+    c = null;
+    d = null;
+    e = null;
+    f = null;
+    return (null); /* not yet implemented */
 }
-function derive_polynomial_roots() {
+function derive_polynomial_roots(a5, a4, a3, a2, a1, a0) {
     "use strict";
-    var a = document.getElementById("a").value,
-        b = document.getElementById("b").value,
-        c = document.getElementById("c").value,
-        d = document.getElementById("d").value,
-        e = document.getElementById("e").value,
-        f = document.getElementById("f").value;
-    if (a !== 0) {
-        document.getElementById("x").value = solve_degree_5(a, b, c, d, e, f);
-    } else if (b !== 0) {
-        document.getElementById("x").value = solve_degree_4(a, b, c, d, e);
-    } else if (c !== 0) {
-        document.getElementById("x").value = solve_degree_3(a, b, c, d);
-    } else if (d !== 0) {
-        document.getElementById("x").value = solve_degree_2(a, b, c);
-    } else if (e !== 0) {
-        document.getElementById("x").value = solve_degree_1(a, b);
-    } else {
-        document.getElementById("x").value = solve_degree_0(a);
+    if (a5 === 0) {
+        if (a4 === 0) {
+            if (a3 === 0) {
+                if (a2 === 0) {
+                    if (a1 === 0) {
+                        return (solve_degree_0(a0));
+                    }
+                    return (solve_degree_1(a1, a0));
+                }
+                return (solve_degree_2(a2, a1, a0));
+            }
+            return (solve_degree_3(a3, a2, a1, a0));
+        }
+        return (solve_degree_4(a4, a3, a2, a1, a0));
     }
+    return (solve_degree_5(a5, a4, a3, a2, a1, a0));
 }
