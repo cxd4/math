@@ -1,0 +1,142 @@
+Here is a working directory for calculating simple arithmetic in the Windows
+command-driven shell environment.  For each arithmetic operation supported,
+there is a Windows executable whose command name (or file name) is that of the
+Intel instruction mnemonic used to accumulate the scalar-arithmetic result.
+
+As an example, this MS-DOS command computes the sum of two integers:
+    ADD.EXE 2 2
+
+The more portable, traditional command syntax is also supported in Windows:
+    add 2 2
+
+The executable will return the result without printing.  To see the result:
+    ans
+
+This will invoke the batch script `ANS.BAT`, which is designed to handle the
+printing of the result computed by the last executable invoked, using once
+again the Windows command shell, instead of depending on C runtime symbols.
+
+Additionally, billions of parameters can be passed as addends for the program.
+    add [p(n)] [p(n - 1)] [p(n - 2)] ... [p(0)]
+
+The output of the following input:
+    add 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+    ans
+Is:
+    ans:  325
+
+This ease of input rivals that of the graphical Windows calculator interface.
+Instead of actively moving the mouse cursor around or interchanging with the
+'=', SHIFT and '+' keys on the keyboard (if using Windows Calculator), only
+typing "add" followed by space-separated parameters to be added is needed.
+
+There are, however, some natural limitations to this calculator that do not
+apply to Calculator for Windows:
+* no unary operator support (e.g. negative numbers or '-', '+', '!', '~')
+* integer-only operands -- no support for any floating-point binary code types
+* maximum integer allowed for each parameter:  (2^32 - 1) or +4294967295.
+
+By compromising the excellent speed of these engines, it is very easy to
+implement support for all of those things above that Calculator for Windows
+supports:  unary modifiers, floating-point decimals, and 64-bit `int` capacity.
+In fact, originally the first and third restrictions did not apply, but support
+for negative numbers and 64-bit math was later removed for engine simplicity.
+The source code is freely available to any vendors interested in adding these.
+
+Avoid confusion by noting this, please!
+Another optimization to this software is to not allocate an extra register to
+compare to the argument count.  That optimization forces the following behavior:
+PARAMETER SOURCE-TO-DESTINATION ORDER IS FROM RIGHT-TO-LEFT, NOT LEFT-TO-RIGHT.
+
+Invoking:
+    sub 2 4 # yields 4 - 2 == +2.
+Invoking:
+    sub 4 2 # yields 2 - 4 == -2.
+
+Think of it like the AT&T assembly language syntax, or like reading Hebrew:
+It is always starting from the right, proceeding leftwards.
+
+Some people may find this inconvenient, but programmatically speaking it has
+been the most optimized design.  Using left-to-right order detracted from the
+finite resolve of the algorithm because it requires a second compare register.
+
+If m = 2 and n = 4, calculate the product of (m + n) and (m - n):
+    add 4 2
+    ans # ans:  6
+    sub 4 2
+    ans # ans:  -2
+    mul 2 6
+    sub %errorlevel% 0
+    ans # ans:  -12
+(Note that `#` indicates the beginning of a comment, not part of the input.)
+
+Since unary operators like the negative sign (`-`) are not supported, calling:
+    mul -2 6
+
+...would just result in a messy, positive decimal, due to the fixated math the
+programs are using to convert any character, including `-`, to a decimal digit.
+User input via ASCII keyboards is, after all, ASCII text, not actual decimals.
+Regardless, the C environment requires that the input passed be text strings.
+
+Therefore, note the use of a new feature specific to the Windows command shell:
+    %errorlevel%
+This is the internal guts of the `ANS` command.  It fetches the last integer to
+be returned from an invoked executable procedure, converts it into an ASCII
+text string suitable for printing onto a screen with text, and prints it.
+
+Note, however, that calling:
+    mul 2 6
+    sub %errorlevel% 0
+    ans
+
+...would have the same exact operation as calling:
+    mul 2 6
+    sub 12 0
+    ans
+
+...both of which will display "-12" as the answer.
+Similarly, do not use the %ERRORLEVEL% macro if the last program returned a
+negative number.  That is just as buggy as specifying a negative directly.
+
+--------------------------------------------------------------------------------
+Exception Handling
+--------------------------------------------------------------------------------
+
+No doubt, some people will be curious to try operations such as:
+    div 0 0
+    div 0 1
+    sqrt 999999999999999
+    pow 0 0 # zero to the power of zero
+
+...where 999999999999999 is still successfully converted to a decimal but, in
+the process, conducts signed overflow on a 32-bit processor and results in the
+decimal -1530494977., causing the square root of this number to be taken.
+
+Division by zero and taking the square root of a negative number traditionally
+raise processor exceptions on most architectures, but there are certain
+fixed-math implementations where hardware is clocked to do very fast math.  In
+such cases, error checking and exception handling generally do not exist.
+
+Most people will be confused, if not disappointed, at the result of calling:
+    div 0 1
+
+...or any such operation.  Since the Intel architecture currently does still
+outcast this instruction as an exception, the condition must be checked
+regardless.  The confusing thing to people, however, will be that a result is
+nonetheless returned:
+    div 0 1 # Execution completes successfully.
+    ans # output:  "ans:  2147483647"
+
+...where +2147483647. is the 32-bit signed representation of positive infinity.
+2^31 - 1 = 01111111111111111111111111111111 [bin]
+
+Presumably, this implementation does have tradition behind it, but it was in
+particular taken from the signal processor vector unit modified for the
+Nintendo 64 gaming console, vended primarily by Silicon Graphics, Inc.
+
+The implementation however is not exactly that.  As per the author's insight,
+there is a macro saturation for "negative infinity" (-Inf), too.
+    div 0 9999999999999
+    ans # output:  "ans:  -2147483648" // 10000000000000000000000000000000 [bin]
+
+For more cases of exception bypasses, please see the source code.
