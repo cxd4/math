@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Triangle Solver</title>
+</head>
+<body>
+<script type="text/javascript" src="engine.js">
+window.alert("Failed to load math engine.");
+</script>
+<script type="text/javascript">
+function externBrowserFetch(id) {
+    "use strict";
+    var dataOut = parseFloat(document.getElementById(id).value);
+    return (dataOut);
+}
+function externBrowserWriteBack(id, data) {
+    "use strict";
+    document.getElementById(id).innerHTML = data;
+    return;
+}
+</script>
+<div>
+<fieldset>
+<legend>Arc Measures for the Three Angles</legend>
+<table>
+<tr><td><i>mA</i></td><td>=</td><td><input type="text" id="mA" value="60"/> degrees</td></tr>
+<tr><td><i>mB</i></td><td>=</td><td><input type="text" id="mB" value="60"/> degrees</td></tr>
+<tr><td><i>mC</i></td><td>=</td><td><input type="text" id="mC" value="60"/> degrees</td></tr>
+</table>
+</fieldset>
+<fieldset>
+<legend>Segment Measures for the Three Sides</legend>
+<table>
+<tr><td><i>AB</i></td><td>=</td><td><input type="text" id="AB" value="1"/> units</td></tr>
+<tr><td><i>AC</i></td><td>=</td><td><input type="text" id="AC" value="1"/> units</td></tr>
+<tr><td><i>BC</i></td><td>=</td><td><input type="text" id="BC" value="1"/> units</td></tr>
+</table>
+</fieldset>
+<fieldset>
+<legend>Other Triangle Properties</legend>
+<table>
+<tr><td><i>P</i></td><td>=</td><td><input type="text" id="perimeter" value="0"/> units</td></tr>
+<tr><td><i>A</i></td><td>=</td><td><input type="text" id="area" value="0"/> square units</td></tr>
+</table>
+</fieldset>
+<button onclick="DOM_callback()">Evaluate</button>
+<fieldset>
+<legend>Results</legend>
+<i>mA</i> = <code id="A">null</code> degrees,
+<i>mB</i> = <code id="B">null</code> degrees,
+<i>mC</i> = <code id="C">null</code> degrees<br/>
+<i>AB</i> = <code id="c">null</code> units,
+<i>AC</i> = <code id="b">null</code> units,
+<i>BC</i> = <code id="a">null</code> units<br/>
+<i>P</i> = <code id="P">null</code> units,
+<i>A</i> = <code id="T">null</code> square units
+</fieldset>
+Rules for solving a triangle using this script:
+<ul>
+<li>Only floating-point decimal quantities can be read--no expressions.</li>
+<li>Insufficient information might be treated as conflicting or invalid.</li>
+<li>Conflicting or contradictory information results in undefined behavior.</li>
+<li>The perimeter is sufficient if at least two side lengths are known.</li>
+<li>For a right triangle, the area and one leg length is sufficient.</li>
+<li>Knowing nothing but all three angle measures is never sufficient.</li>
+</ul>
+Currently unsupported till the near future:
+<ul>
+<li>Advanced trigonometry for one-angle-two-sides or one-side-two-angles.</li>
+<li>Solve regular triangles when only the perimeter or area are known.</li>
+<li>Isosceles triangle rules for filling in more information.</li>
+<li>Use the area of a right triangle and its hypotenuse, not a leg length.</li>
+<li>?? more ??</li>
+</ul>
+</div>
+</body>
+</html>
