@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Roots Deriver for Standard Polynomial Constraints</title>
+</head>
+<body>
+<script type="text/javascript" src="factor.js">
+window.alert("Failed to load math engine.");
+</script>
+<script type="text/javascript">
+function DOM_callback() {
+    var i = parseInt(document.getElementById("i").value);
+    document.getElementById("factors").innerHTML = factorize(i);
+    return;
+}
+</script>
+<div>
+product: <input type="text" id="i" value="0"/>
+<br/>
+<button onclick="DOM_callback()">Solve for <i>x</i></button>
+<br/>
+<i>x</i> = <code id="factors"></code>
+</div>
+<p>
+<a href="http://validator.w3.org/check?uri=referer">
+<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Strict"/>
+</a>
+</p>
+</body>
+</html>
