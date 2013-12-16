@@ -1,9 +1,29 @@
 /******************************************************************************\
 * Project:  Standard Polynomial Roots Solver                                   *
-* Release:  2012.10.01                                                         *
+* Release:  2013.12.16                                                         *
 * Creator:  R. J. Swedlow                                                      *
-* License:  public domain                                                      *
+* License:  none                                                               *
 \******************************************************************************/
+
+/*
+function sqrt(S)
+{
+    var Ans = S / 2;
+
+    do {
+        Ans = (Ans + S / Ans) / 2;
+    } while (Ans * Ans != S);
+    return Ans;
+}
+*/
+function sqrt(x) {
+    "use strict";
+    return Math.sqrt(x);
+}
+function cbrt(x) {
+    "use strict";
+    return Math.pow(x, 1 / 3);
+}
 
 function solve_degree_0(a) { //constant
     "use strict";
@@ -30,11 +50,27 @@ function solve_degree_2(a, b, c) { //quadratic
 }
 function solve_degree_3(a, b, c, d) { //cubic
     "use strict";
-    a = null;
-    b = null;
-    c = null;
-    d = null;
-    return (null); /* not yet implemented */
+    var A, B, p, q, r;
+
+    p = b / a;
+    q = c / a;
+    r = d / a;
+    a = (3 * q - p * p) / 3;
+    b = (2 * p * p * p - 9 * p * q + 27 * r) / 27;
+
+    d = (b * b / 4) + (a * a * a / 27);
+    if (d < 0) {
+        return undefined; /* currently unimplemented */
+    }
+    d = sqrt(d);
+    A = cbrt(-b / 2 + d);
+    B = cbrt(-b / 2 - d);
+
+    return (
+        A + B + ", " +
+        -(A + B) / 2 + " + " + sqrt(3) * (A - B) / 2 + "i, " +
+        -(A + B) / 2 + " - " + sqrt(3) * (A - B) / 2 + "i"
+    );
 }
 function solve_degree_4(a, b, c, d, e) { //quartic
     "use strict";
