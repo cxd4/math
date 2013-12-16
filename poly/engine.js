@@ -22,6 +22,9 @@ function sqrt(x) {
 }
 function cbrt(x) {
     "use strict";
+    if (x < 0) { /* problem with JavaScript interpreter */
+        return -Math.pow(-x, 1 / 3);
+    }
     return Math.pow(x, 1 / 3);
 }
 
