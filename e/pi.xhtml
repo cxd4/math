@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Composition Check for Whole Numbers</title>
+</head>
+<body>
+<script type="text/javascript" src="engine.js">
+window.alert("Failed to load math engine.");
+</script>
+<script type="text/javascript">
+function DOM_callback() {
+    var limit = parseInt(document.getElementById("limit").value);
+
+    document.getElementById("e").innerHTML = Math.E;
+    document.getElementById("e_f").innerHTML = derive_e_by_limit(limit);
+    document.getElementById("e_i").innerHTML = derive_e_by_series(limit);
+    return;
+}
+</script>
+<div>
+<p><i>limit</i> = <input type="text" id="limit" value="100"/> iterations</p>
+<button onclick="DOM_callback()">Approximate Euler's Number</button>
+</div>
+<div>
+<table border="0">
+<tr>
+<td><code>(Math.E) JavaScript constant</code></td>
+<td align="center">=</td>
+<td><code id="e">2.718281828459045</code></td>
+</tr>
+<tr>
+<td><code>derive_e_by_limit(iteration)</code></td>
+<td>=</td>
+<td><code id="e_f">null</code></td>
+</tr>
+<tr>
+<td><code>derive_e_by_series(limit)</code></td>
+<td>=</td>
+<td><code id="e_i">null</code></td>
+</tr>
+</table>
+</div>
+<p>
+<a href="http://validator.w3.org/check?uri=referer">
+<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Strict"/>
+</a>
+</p>
+</body>
+</html>
